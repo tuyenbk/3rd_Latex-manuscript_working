@@ -1,0 +1,137 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{}{buildingSMART}{2015}]{buildingsmartIFC}
+buildingSMART (2015).
+\newblock ``Ifc overview summary, $<$http://www.buildingsmart-tech.org/$>$.
+\newblock Accessed: 2015-10-11.
+
+\bibitem[\protect\citeauthoryear{}{East et~al.\@}{2012}]{east12}
+East, E.~W., Nisbet, N., and Liebich, T. (2012).
+\newblock ``Facility management handover model view.''\ {\em Journal of
+  computing in civil engineering}, 27(1), 61--67.
+
+\bibitem[\protect\citeauthoryear{}{Eastman}{2012}]{eastman12}
+Eastman, C. (2012).
+\newblock ``The future of ifc: Rationale and design of a sem ifc layer.
+\newblock Presentaion at the IDDS workshop.
+
+\bibitem[\protect\citeauthoryear{}{Eastman et~al.\@}{2009}]{eastman09}
+Eastman, C., Jeong, Y., Sacks, R., and Kaner, I. (2009).
+\newblock ``Exchange model and exchange object concepts for implementation of
+  national bim standards.''\ {\em Journal of Computing in Civil Engineering},
+  24(1), 25--34.
+
+\bibitem[\protect\citeauthoryear{}{Froese}{2003}]{Froese03}
+Froese, T. (2003).
+\newblock ``Future directions for ifc-based interoperability.''\ {\em ITcon},
+  8, 231--246.
+
+\bibitem[\protect\citeauthoryear{}{Hu}{2014}]{hu14}
+Hu, H. (2014).
+\newblock ``Development of interoperable data protocol for integrated bridge
+  project delivery.''\ Ph.d., Ph.d.
+\newblock UMI Dissertations.
+
+\bibitem[\protect\citeauthoryear{}{inframodel.fi}{2016}]{inframodel16}
+inframodel.fi (2016).
+\newblock ``Inframodel, $<$http://www.inframodel.fi/en/$>$.
+\newblock Accessed: 2016-12-10.
+
+\bibitem[\protect\citeauthoryear{}{Jiang et~al.\@}{2015}]{jiang2015}
+Jiang, Y., Yu, N., Ming, J., Lee, S., DeGraw, J., Yen, J., Messner, J., and Wu,
+  D. (2015).
+\newblock ``Automatic building information model query generation.''\ {\em
+  Journal of Information Technology in Construction}.
+
+\bibitem[\protect\citeauthoryear{}{Katranuschkov
+  et~al.\@}{2010}]{katranuschkov10}
+Katranuschkov, P., Weise, M., Windisch, R., Fuchs, S., and Scherer, R.~J.
+  (2010).
+\newblock ``Bim-based generation of multi-model views.''\ {\em CIB W78}.
+
+\bibitem[\protect\citeauthoryear{}{landxml.org}{2016}]{landxmlorg}
+landxml.org (2016).
+\newblock ``About landxml.org, $<$http://www.landxml.org/About.aspx$>$.
+\newblock Accessed: 2015-12-10.
+
+\bibitem[\protect\citeauthoryear{}{Le and Jeong}{2016}]{le2016term}
+Le, T. and Jeong, H. (2016).
+\newblock ``Technical term similarity model for natural language based data
+  retrieval in civil infrastructure projects.''\ {\em ISARC. Proceedings of the
+  International Symposium on Automation and Robotics in Construction}, Vol.~33.
+
+\bibitem[\protect\citeauthoryear{}{Lee et~al.\@}{2016a}]{lee2016mvd}
+Lee, Y.-C., Eastman, C.~M., and Solihin, W. (2016a).
+\newblock ``An ontology-based approach for developing data exchange
+  requirements and model views of building information modeling.''\ {\em
+  Advanced Engineering Informatics}, 30(3), 354--367.
+
+\bibitem[\protect\citeauthoryear{}{Lee et~al.\@}{2016b}]{lee16}
+Lee, Y.~C., Eastman, C.~M., Solihin, W., and See, R. (2016b).
+\newblock ``Modularized rule-based validation of a bim model pertaining to
+  model views.''\ {\em Automation in Construction}, 63, 1--11.
+
+\bibitem[\protect\citeauthoryear{}{Lin et~al.\@}{2015}]{Lin15}
+Lin, J.-R., Hu, Z.-Z., Zhang, J.-P., and Yu, F.-Q. (2015).
+\newblock ``A natural-language-based approach to intelligent data retrieval and
+  representation for cloud bim.''\ {\em Computer-Aided Civil and Infrastructure
+  Engineering}.
+
+\bibitem[\protect\citeauthoryear{}{Scarponcini}{2006}]{Scarponcini06}
+Scarponcini, P. (2006).
+\newblock ``Transxml: Establishing standards for transportation data
+  exchange.''\ {\em Joint International Conference on Computing and Decision
+  Making in Civil and Building Engineering}, Montreal, Canada\ (June).
+
+\bibitem[\protect\citeauthoryear{}{See et~al.\@}{2012}]{see12}
+See, R., Karlshoej, J., and Davis, D. (2012).
+\newblock ``An integrated process for delivering ifc based data exchange.
+
+\bibitem[\protect\citeauthoryear{}{Tversky}{1977}]{tversky1977sim}
+Tversky, A. (1977).
+\newblock ``Features of similarity..''\ {\em Psychological review}, 84(4), 327.
+
+\bibitem[\protect\citeauthoryear{}{Venugopal et~al.\@}{2012a}]{venugopal12a}
+Venugopal, M., Eastman, C., and Sacks, R. (2012a).
+\newblock ``Configurable model exchanges for the precast/pre-stressed concrete
+  industry using semantic exchange modules (sem).''\ {\em International
+  Conference on Computing in Civil Engineering},  269--276.
+
+\bibitem[\protect\citeauthoryear{}{Venugopal et~al.\@}{2012b}]{venugopal12}
+Venugopal, M., Eastman, C.~M., Sacks, R., and Teizer, J. (2012b).
+\newblock ``Semantics of model views for information exchanges using the
+  industry foundation class schema.''\ {\em Advanced Engineering Informatics},
+  26(2), 411--428.
+
+\bibitem[\protect\citeauthoryear{}{Windisch et~al.\@}{2012}]{windisch12}
+Windisch, R., Katranuschkov, P., and Scherer, R.~J. (2012).
+\newblock ``A generic filter framework for consistent generation of bim-based
+  model views.''\ {\em European Group for Intelligent Computing in Engineering,
+  EG-ICE 2012 - International Workshop: Intelligent Computing in Engineering}.
+
+\bibitem[\protect\citeauthoryear{}{Won et~al.\@}{2013}]{won13}
+Won, J., Lee, G., and Cho, C. (2013).
+\newblock ``No-schema algorithm for extracting a partial model from an ifc
+  instance model.''\ {\em Journal of Computing in Civil Engineering}, 27(6),
+  585--592.
+
+\bibitem[\protect\citeauthoryear{}{Zhang et~al.\@}{2013}]{zhang13}
+Zhang, C., Beetz, J., and De~Vries, B. (2013).
+\newblock ``Towards model view definition on semantic level: A state of the art
+  review.''\ {\em European Group for Intelligent Computing in Engineering,
+  EG-ICE 2013 - 20th International Workshop: Intelligent Computing in
+  Engineering}.
+
+\bibitem[\protect\citeauthoryear{}{Zhang and El-Gohary}{2016}]{Zhang16}
+Zhang, J. and El-Gohary, N. (2016).
+\newblock ``Extending building information models semiautomatically using
+  semantic natural language processing techniques.''\ {\em Journal of Computing
+  in Civil Engineering},  C4016004.
+
+\bibitem[\protect\citeauthoryear{}{Ziering et~al.\@}{2007}]{Ziering07}
+Ziering, E., Harrison, F., and Scarponcini, P. (2007).
+\newblock {\em TransXML: XML schemas for exchange of transportation data}, Vol.
+  576.
+\newblock Transportation Research Board.
+
+\end{thebibliography}

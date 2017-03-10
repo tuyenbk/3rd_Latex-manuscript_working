@@ -1,0 +1,27 @@
+\begin{table} [t]
+\caption{Experiment results}
+\label{table:experiment}
+\centering
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{l l l l}
+\hline
+\hline
+\textbf{Keyword}  & \textbf{Matched Landxml Branches} & \textbf{S} & \textbf{Correct?}\\
+\hline
+drainage & PipeNetwork-->pipeNetworkType-->storm & 0.25 & yes\\
+vertical alignment  & Roadway-->Alignment-->Profile-->ProfAlign & 0.52 & yes\\
+shoulder& Roadway-->Lanes&0.28&no\\
+pavement &Zone-->pavementSurfaceType & 0.25& yes\\
+roadway type &Roadways-->Roadway-->intersectionType & 0.54 & no\\
+safety& Roadway-->TrafficVolume & 0.18&yes\\
+&Roadway-->Intersection-->TrafficControl&0.18& yes\\
+traffic lane& Roadway-->Lanes & 0.53&yes\\
+climate& zoneMaterialType-->soil & 0.25&no\\
+\hline
+\hline
+\end{tabular}
+\normalsize
+\end{table}
+\efloatseparator
+ 

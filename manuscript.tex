@@ -1,0 +1,247 @@
+\documentclass[Journal, BackFigs,NoLists, DoubleSpace]{ascelike}%figs in the back
+%\documentclass[Journal, InsideFigs,DoubleSpace]{ascelike}%figs in text
+%
+
+%include package for inserting picture
+\usepackage{graphicx}%insert image
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\graphicspath{{figures/}}%folder contains images
+%include package for inserting multiple pictures
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[T1]{fontenc}
+\usepackage{array}%for table with fixed width
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\usepackage{amsmath}
+%\usepackage{endfloat}
+
+\begin{document}
+
+% 
+\title{Automated generation of  model view definitions using an context-aware approach MVD generation from civil engineering data standard}
+%
+\author{
+Tuyen Le
+\thanks{
+Ph.D. Candidate, Department of Civil, Construction and Environmental Engineering, Iowa State University. Ames, IA50011. E-mail: ttle@iastate.edu.},
+\and
+H. David Jeong%
+\thanks{Associate Professor, Department of Civil, Construction and Environmental Engineering, Iowa State University. Ames, IA 50011. E-mail: djeong@iastate.edu.}
+ }
+ 
+%aa
+\maketitle
+%
+\begin{center}
+(To be submitted to ASCE Journal of Computing in Civil Engineering) 
+\end{center}
+%
+%ABSTRACT
+\begin{abstract} %150-175 words (as required by ASCE)
+	%background:
+	Open data standards (e.g. LandXML, TransXML) have been widely recognized as a solution to the interoperability issue in exchanging digital data in the transportation sector. Since these schemas include rich sets of data types covering a wide range of disciplines across all project phases, model view definitions (MVDs) which define subsets of schema are required to specify what types of data to be shared in accordance with a specific exchange scenario.
+	%Research gap
+	The traditional method for generating MVDs is time consuming and tedious as developers have to manually search for entities and attributes names that semantically match to the data exchange requirements. 
+	%Research objective
+	This paper presents a computational method that automatically map users' keywords to semantics-equivalent data labels (classes and attributes) in LandXML data schema. 
+	%Research methodology
+	The study employs a lexical database of civil engineering terms to interpret users's intention from their keywords. The study also introduces a context-aware entity search algorithm that is able to find equivalent or most similar entities for a given keyword.
+	%result
+	The developed method has been experimented on a set of keywords extracted from an asset management manual. The experiment results show that the design algorithm is successful in generating partial LandXML branches from keywords.    
+\end{abstract}
+%KEYWORDS
+\KeyWords{Civil Project, Model View Definition, Civil Engineering Lexical Database, LandXML, Data Extraction, Context-Aware}
+%
+\section{Introduction} \label{sec:intro}%(600 words=50 sentences)
+%TOPIC:
+%Guide: Research background; topic introduction, territory; centrality--> general background information 
+%This paper: model view definition needs (data standards is complex and large; each context/domain needs a specific subset--> model view is needed)
+Neutral data standards have been widely accepted as an effective solution to the interoperability issue in the construction industry. Several open standards have been proposed for various construction sectors, for instance Industry Foundation Classes (IFC) \cite{buildingsmartIFC} and LandXML \cite{landxmlorg}. These standardized data models consist of rich sets of data elements covering various business processes and disciplines during the project life-cycle. Since a specific data exchange scenario needs only a subset of data, neutral data standards alone are insufficient to facilitate seamless digital data exchange among project stakeholders \cite{Froese03,east12}. Digital datasets are large and complicated; thus, in order to querying data, the end user is required to have considerable programming skills and proper understanding of the source data schema. There is a need for formal definitions of schema subsets determining what types of data for specific data use cases. 
+\par
+The extraction of partial information models is a crucial requirement for the reuse of digital data generated through the life cycle of a infrastructure project. Digital infrastructure models consist of rich sets of data elements covering various business processes and disciplines. However, a specific data exchange scenario needs only a subset of data [\cite{Froese03,east12}]. Since digital datasets are presented only in computer-readable formats and mostly complicated; data extraction, especially from multiple sources, becomes a big burden on the end user [\cite{khattak15}]. Users are required to have considerable programming skills and properly understand the structure and meanings of each entity or attribute included in the source data schema. This is especially challenging for the civil domain since data are commonly gathered from multiple sources with potential conflicts of data format and terminology (entity and attribute names). Data driven decision making based on a wrong extracted dataset would likely lead to a wrong decision. Thus, there is a demand for computational techniques that can allow for automated extraction of data with minimized human interfere. 
+\par
+%NICHE: 
+%Guide: Overall to one aspect to be addressed ---> limitation in current state ---> highlight the problem, raise general questions, propose general hypotheses ---> emphasize the need and justify the need to address
+%This paper: state of practices on MVD development is on a case-by-case basis, and relies on human-crafted work
+Model View Definition (MVD), a concept introduced by buildingSMART, aims to fulfill the above need. MVDs are subsets of a standard data schema for particular data use scenarios. The availability of these model views will underpin the extraction of data from complicated sets of data generated from the AEC industry. The civil sector has introduced several model views of the Landxml schema. The pioneer effort in this area is the InfraModel project carried out by the Technical Research Center of Finland that aims to specify subsets of LandXML schema for different types of transportation assets \cite{inframodel16}. In spite of a considerable number of research have been made, the existing MVDs are still limited to a large demand from the industry. This is because that the current method for developing MVDs is on a manual basis which is time consuming \cite{venugopal12,eastman12,hu14}. MVDs are required to be regularly tailored to reflect changes in industry practices. Therefore, it is demanded to shift the current ad-hoc practice of model view definition to a more rigorous methodology \cite{venugopal12}. 
+%A considerable amount of research efforts on MVD development has been made in both the building and transportation sectors. Examples of the existing MVDs for building data are those developed by buildingSMART such as IFC coordination View, FM handover view, structural analysis view, etc.
+\par
+%GAP of KNOWLEDGE
+%In order to eliminate the human-reliance MDV procedure, the automated method and tool are demanded. Those program needs to automatically match user data needs to the data labels in the the integrated data space. Using keywords to extract data from a database is more favorable to the end user thanks to the ease of use. 
+\par
+%OBJECTIVES and METHOD
+%Guide: research goals, questions/hypotheses, methodology, and main results) --> claiming the value of the research --> outline the structure of the paper
+%This paper: mvd generator from users' keywords; using lexical database of ce terms, designing a context-aware data entities matching algorithm; 
+To fill that need, this research aims to develop a computational framework for automated generation of MVDs for the civil sector. The platform is capable of interpreting users' intention from their input keywords and automatically generating corresponding subsets of LandXML schema. Keywords is the most preferred method for searching information and the preferred input they user like to use. As their effort in typing the input is minimized. This study proposed a method for generating mvd using user keywords. for large source schema like IFC which consist of  thousands of entitieis and attributes, manually finding an equivalent items is tedious, time consuming and especially error-prone. in addition, a keyword meaning may be generic, it may contains detailed concepts. For example, if drainage is one of the needed information specified in an idm. The problem become extremely challenging when the current source schema does not contain the needed information, or their names are differrent from those mentioned in the idm. 
+%
+Specifically, the proposed framework is consisted of the following two modules: (1) interpreting user's data needs from their input keywords using a digital dictionary of transportation asset data elements, and (2) designing an context-aware algorithm that can find semantically equivalent or most similar data entities in the standard data schema.
+%
+The advantage of this method is the understanding of senses of technical terms and match classes based on their semantics instead of their pure labels. It allows users to be flexible in keyword use and is expected to significantly reduce efforts on MVD development.
+%
+\section{Background} \label{sec:litrev} %(700 words=55 sentences)
+%section introduction
+%This research employed a hybrid approach which combines a series of techniques related to text analysis and semantic similarity measurement to semantically match user's input keywords to the data entities in the sources schema. Each technique is meant to support each phase of the proposed methodology. The details of research methodology will be presented in the section \ref{sec:proposed_method} below. This section presents a the state-of-the-art regarding partial model extraction in the construction industry and a brief introduction to the techniques deployed in the research framework.
+\subsection{Partial model extraction}
+Methods for extracting partial models for specific use cases can be classified into the following groups ordered by the degree of ease of use for end users: (1) developing a query language specifically for Building Information Modeling (BIM) models, (2) ontology-based query approaches, and (3) user-oriented query methods. The first group aims to tailor the conventional query languages (e.g., SQL, Object Orientation) for extracting information from BIM models. The major focus is on developing spatial filter strategies. Examples of these efforts include the Spatial query language \cite{borrmann09}, QL4BIM Spatio-semantic query language \cite{daum14}; graph-based BIM retrieval \cite{langenhan13}, and topological querying \cite{khalili13}. The second group is to enhance the human-readability of data schema by utilizing an ontology approach to transform relations among data entities from implicit to explicit. With these semantic presentations, it is easier for end users to read and comprehend a complicated data schema. An extensive number of studies based on this approach have been carried out for various use cases including ontology-driven construction information retrieval for tunnel projects \cite{min14}, ontology partial BIM model extraction for building projects \cite{zhang12}, ontology-based extraction of construction information \cite{nepal12} and ontology based querying over linked life cycle data spaces \cite{le16}. The last class of partial model query approaches moves a step further in terms of enhancing the ease of data extraction by providing query tools that require less effort from users. For example, Won et al. (2013) \cite{won13} proposed a no-schema algorithm that allows for the extraction of IFC instances without using IFC schema or MVD. In addition, a visual BIM query \cite{wulfing14} was also established to visualize query codes. Although significant research efforts have been conducted, there is still a lack of natural language interface platforms that can enable computers to understand and interpret the end userâ€™s data interests in the civil infrastructure domain.
+%
+\subsection{Data Standards for Civil Infrastructure}
+A large body of research has been undertaken for the last two decades to establish open data standards for the highway industry. Most of the existing standards were developed adopting the XML technique. LandXML \cite{landxmlorg}, a result of early international collaboration efforts in facilitating interoperability in the civil industry, covers the following main groups of data: survey data, ground model, parcel map, alignment, roadway and pipe network. As an attempt to improve LandXML and propose a new standard specialized for the transportation industry, TransXML (NCHRP Project 20-64) project was chartered by the US National Cooperative Highway Research Program. TransXML focused on 4 business areas: survey/road design, construction/materials, bridge structures, and transportation safety \cite{Scarponcini06}. Of these domains, survey and geometric roadway classes are mainly derived from LandXML and are included suggestions for improvement \cite{Ziering07}. buildSMART is also actively participating in developing standards for infrastructure assets. This agency has just released IFC 4x1 for alignment information and is carrying out several other ongoing projects such as IFC for Road and IFC for bridge. 
+%
+\subsection{Model View Definition}
+Model View Definition (MVD) is a formal a subset of a data schema in accordance with data requirements for a specific data use case \cite{see12}. MVD, which was first introduced by the building sector, is to ensure information to be used unambiguously when data is transferred from digital models to a domain user \cite{jiang2015}. The concept of MVD has also been adopted by the infrastructure sector recently. The VTT Technical Research Center of Finland has proposed the Inframodel \cite{inframodel16} which is a Finish national application specification for subsets of LandXML schema. The current version Inframodel 3 provides various MVDs for different types of infrastructure assets during the plan and design stages, for instance waterways, water supply and sewage, roadways and streets, railways, and pipe networks.
+%
+%Extensive amount of research efforts have been undertaken to develop MVDs for data transferring from up-stream phases to down-stream use such as energy modeling \cite{Jeong14}, building asset operation also know as Cobie \cite{east12,east07}, etc. There is also MVDs for the reversed flow from downstream actors such as cost, construction methods, product details to enhance early planing and design \cite{berard12}. Some of the results from the research community has become national or international data exchange standards buildingSMART such as IFC coordination View, FM handover view, structural analysis view, etc by buildingSMART, and Inframodel for the civil industry. 
+%
+%Each asset would involve many other use cases for instance cost analysis, traffic analysis. More efforts are needed for other types of assets. Even all types of assets are successfully developed, more attempt is required to further identified for particular use cases. 
+\par
+The process of developing a MVD includes the following three steps \cite{see12,venugopal12,eastman09}: (1) professional experts investigate industry business workflows and data exchange requirements to develop an Information Delivery Manual (IDM); (2) software developers translate the IDM in natural language into a computer-readable MVD by mapping required data to the entities in an open data schema and re-structuring them in a formal computerized format so that software vendors are able to develop data exchange applications; and (3) software applications are implemented and the translation results are validated by reviewing concept by concept. This approach to developing MVDs is on a manual basis which is time consuming \cite{venugopal12,eastman12,hu14}. This leads to the shortage of MVDs in comparison with the large demand from the construction industry. Thus, there is a need for computational methods for automated generation of data schema subsets \cite{venugopal12}. 
+
+%*********limitations of the current mvd practices: 
+%\cite{lee2016mvd}: problems of the current mvd practices - paper-based, lack of robust standard method, low reuse: (1) manual collection of information from idm spreadsheet (which is obtained based on industry experts,)- not manageable, error-prone; (2) separate definition for each entities, (3) unstructured information-->hard to verify consistency and redundancy. (4) mvd developers required to manually transfer the reference text idm into formal concepts with attributes, mvd and idm developers are two distinct entities, hard to confirm that the mvd reflect information in mvd.  
+%*********
+%
+\subsection{Related Studies on Automated Generation of MVD }
+A number of studies have been carried out to enhance the efficiency of developing MVD. Several researchers aimed to automatize step 2 by developing tools that allow for reduction of manual work by technical developers in translating IDMs into machine-readable MVDs, for instance the work by \citeN{katranuschkov10}. As an extension of this work into step 3, \citeN{windisch12} proposed a framework that supports automated validation of model views. These tools can reduce burden on software developers; they, however, still are required to have a deep understanding of IFC schema and domain knowledge. Another research area is to improve the re-usability of MVD by introducing the concept of SEM (Semantic Exchange Model) \cite{venugopal12a,lee16,zhang13,lee16}. This approach develops modularized MVDs in which concepts and relations are explicitly structured using ontology. Recently, \citeN{lee2016mvd} proposed an ontology-based MVD generator. The required data items are extracted from domain guidances and transformed into an ontology which is then mapped to the entities of IFC schema. By representing IDM in ontology format, this framework can reduce semantic mismatches between required data and IFC classes. However, these efforts are not yet fundamentally transform the way how MVDs are generated and maintained as much manual work is still needed for step 1 of the MVD development process. Generating MVDs using natural language input would provide ease of use to end users \cite{jiang2015}; as a result, industry specialists can fully benefit from data-rich BIM models.
+\par
+\cite{lee2016mvd}: The suggested approach using a case study consists of four big steps: (1) establishing IDM ontology on the Protégé (ontology format of an written idm), (2) validating a dataset using semantic reasoning, (3) parsing OWL for generating concept modules and translating OWL/XML ontological IDM into mvdXML (using a map table mapping owl/xml and ifc entities), and (4) importing mvdXML into the IfcDoc tool to generate MVD documentation (ifcdoc can read mvdxml and generate mvd html docs).
+\par
+\subsection{Domain semantic concept mapping algorithms}
+%
+In the construction industry, research efforts are currently focusing on standardizing the data structure format, there are few research have been done to deal with the issue of sense ambiguity. Zhang and El-Gohary (2016) \cite{Zhang16} proposed an algorithm called ZESeM aiming to match a certain keyword to the most semantic nearest IFC entity (extracted new concepts (then verified by users) and match them (those accepted by users- this is why it is called semiautomatic-adopted rate is around 80\%) to existing ifc concepts (related if concept candidate are obtained using string-based and wordnet) through one of the following relations hypernym, hyponym and synonym). The algorithm includes two sequential steps including term-based matching and semantic relation based matching. Since the algorithm accepts matches from the label-based matching step, disambiguation still remains in cases in which the same word form is used for different senses. In addition, ZESeM relies on Wordnet which is a generic lexicon, the applicability would be limited. Lin et al. (2015) \cite{Lin15} developed a IFD based framework for BIM information retrieval. IFD Library (International Framework for Dictionaries library), which is developed and maintained by the international buildingSMART, is a dictionary of BIM data terminology that assigns synonyms the same ID. The integration or exchange of data using IDs rather than data names would eliminate semantic mismatch. However, since IFD is a hand-made electronic vocabulary, constructing this e-dictionary is time consuming and therefore it is still very limited to large collection of terms in the construction industry.
+%
+\section{Keyword-Driven Method for Generation of MVDs} \label{sec:proposed_method} %(800 words=60 sentences)
+%
+Figure \ref{fig:concept} shows the concept of the developed method for automated generation of MVDs. Using this approach, a subset of data schema will be generated for a given set of keywords. Those keywords describe data needs of specific contexts for instance bridge elements, drainage systems, land boundaries, traffic safety, alignment, pavement structure, etc. As shown in the literature review, LandXML-2.0 is the most comprehensive data standard for information exchange during the life-cycle of civil infrastructure assets. LandXML organizes classes and attributes in a tree structure. The purpose of this study is to propose a method that can assist users in extracting partial branches of entities from this neutral data standard using only keywords as input information.
+\par
+The proposed algorithm for finding equivalent or most similar entities in LandXML schema is illustrated in Figure \ref{fig:method}. The algorithm interprets users' intention from their keywords and look for semantics rather than specific words. As shown, the proposed matching algorithm is comprised of three stages. First, the algorithm generates a potential concept from the input keyword using a domain dictionary. In the second stage, the similarity between the input concept and every LandXML class is determined. The algorithm measures the similarity (S) based on two assessments including concept name match (Sn) and context match (Sc) given in Equation \ref{eq:sim}, where $w_n$ and $w_s$ respectively represent the weight of each matching type. Concept name matching is based on the similarity of the corresponding character sequences while context matching corresponds to how many attributes they share in common. Finally, all the matched LandXML entities are ranked by the total similarity score, and the top match is recognized as an equivalent or the most similar entity to the user's keyword. The parent and children nodes connected to the selected one in the LandXML tree are detected and used for composing a partial schema. Sections below discuss in detail the process of generating concept candidate from a keyword and similarity measures. 
+%
+\begin{equation}
+S=w_nSn+w_cSc
+\label{eq:sim}
+\end{equation} 
+%
+%In the first stage, a ranked list (N) of nearest terms for a keyword input (and including itself) will be generated by utilizing the semantic similarity model developed in Task 2. In stage 2, the algorithm will look for data item names (class or attribute) in the source dataset (e.g., Landxml file) for each term n in the nearest list N. The Levenshtein algorithm (Gale and Church 1993) \cite{gale93}, which is an edit-distance matching based method, will be used to compute the sequence similarity score between a term n and a data label s. For example, vertical alignment and 'verticalAlign' would be considered as a match. These matchings are accepted as potential candidates for the desired data and will then be tested in stage 3 to examine if the near term n and the matched data s share any common attributes, or hyponyms. The attributes and hyponyms of term n can be obtained from the knowledge based developed in Task 3. Candidates that fail this test will be removed from the machining list. The final matches will be ranked by the combined similarity score of stage 2 and stage 3. This algorithm will eliminate the extraction of wrong data and enable the extraction of the relevant data once the source dataset does not consist of the exact desired data. 
+%
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.5\textwidth]{Figure1_partial_views}
+	\caption{Excerpts of Partial Views of LandXML}
+	\label{fig:concept}
+\end{figure}
+% 
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Figure2_proposed_method.png}
+	\caption{Keyword-driven MVD generation approach}
+	\label{fig:method}
+\end{figure}
+\subsection{Domain knowledge base}
+in a previous study, the author develop a method for automated construction of domain knowledge, this study employed the open source tookkit previously developed by the authors. this method to develop a knowledge based for the civil engineering using civil engineering input corpus and the input. the process includes. the method is a machine learning based method which learning lexical relationship between terms based on their statistical data of their occurrence and their context words in domain text. the method enable to classify heterogeneous terms in the following relations: synonymy, hyponymy, and meronymy. Figure below shows a partial knowledge based network utilized in this study. 
+
+\subsection{Keyword to Concept Interpretation}%Keyword semantics, conceptualization 
+%"Semantic search is a data searching technique in a which a search query aims to not only find keywords, but to determine the intent and contextual meaning of the words a person is using for search."
+\par
+Keywords are a short way that end users use to express their needs when searching for information. This study aims to search for semantically equivalent LandXML entities rather than specific words. Thus, interpreting semantics of keywords is a prerequisite task. For instance, using `roadway alignment', the user intends to look for the specific `alignment' attribute of the `roadway' concept. In this study, a keyword is defined to be composed of the following two constituents: concept word (Cn), and context word (Cc). To detect these two elements from a keyword, the designed algorithm employs a civil engineering knowledge base namely Civil Engineering Lexicon (CeLex) developed by the authors \cite{le2016term}. This lexical database organizes civil engineering technical terms in a lexical structure where terms are connected to each other through following relations: synonyms, attributes and hyponyms. By matching the individual words constituting a multi-word keyword to term names in CeLex, Cn and Cc can be determined. If the input is a single-word keyword, Cc is associated with a set of all CeLex terms that link to the broad Cn word via the attribute relation. As a result, given a keyword, this stage will generate a concept name Cn and its context words Cc(s).
+%A keyword can contains one or multiple words. A single-word keyword (e.g., alignment) refers a broad concept representing a certain domain. In order to narrow down the search, additional filter words are commonly added to make make a more specific keyword, for instance roadway alignment, channel alignment etc.  
+
+% Synonyms and attributes. roadway alignment, road profile, highway alignment should result in the same sub schema. For each keyword, a set of semantic equivalent phrases are generated and used as alternative input during the searching process. There are different ways to represent the same concept, and a single term can refer to different things. in order to allow users to be flexible in choosing a keyword, the algorithm needs to capture synonyms when matching name. The algorithm is able to recognize semantic equivalent terms to search for entities. This study employs a data dictionary namely Civil Engineering Lexicon (CeLex) \cite{le2016term} which is developed in the authors' previous study. 
+%
+% A keyword can contains one or multiple words. In order to narrow the search interest, additional filter words are commonly added to make a more specific keywords, for instance roadway alignment, channel alignment, etc. In this study, the main component of a keyword is defined as the \textit{target concept} ($C_k$), and filter elements represent the desired \textit{attribute} ($A_k$) of the target concept. This stage aims to generate all possible concepts from a single keyword. For example, `roadway alignment'  will generate the following two candidates: (1) $C_k$ = `roadway', $A_k$ = `alignment'; and (2) $C_k$ = `roadway alignment', $A_k$ = `null'. 
+% 
+
+
+\subsection{Related concept collection}
+%
+this study employs different dictionary-based similarity to detect the most related keywords for a certain keyword. the related keywords could be belong to one of the following three categories, hyponymy (is-a) and meronymy (par-of). 
+%
+\subsection{Concept name matching - Sn}
+%
+Concept name is an indicator of semantic similarity. The degree of overlapping in name between the input concept and a source entity reflects the similarity degree between them. \citeN{tversky1977sim} proposed that the similarity between two features can be a function of their common and distinguishing portions. Comparing two concept names can be based on the similarity of their characters. In this study, the name similarity are determined using Equation \ref{eq:simN}, where $n_A$ and $n_B$ are respectively the individual words of the target and source concept names. For example, the similarity between the `traffic sign' keyword and the `road sign' entity in LandXML is 1/3 (33\%). To address the issue whereby there are variant names for representing the same concept, a set of synonym names extracted from the CeLex database for the input concept are used to find the most similar LandXML class. The final similarity score (Sc) is from the synonym that has the best match. 
+%
+\begin{equation}
+Sn=\frac{|Cn_A\cap Cn_B|}{|Cn_A\cup Cn_B|}
+\label{eq:simN}
+\end{equation} 
+%
+%
+%Tversky, Amos. "Features of similarity." Psychological review 84.4 (1977): 327. s(a; b)= F(A+B; A-B; B-A).
+
+%
+\subsection{Context matching - Sc}
+This measure compares context items of the target and source concepts. This is to reduce mismatch due to the issue of the same word referring to different things. By comparing their attributes and other related entities, their meaning difference can be detected. The similarity from this view can be measured by the commonality and difference between their context entities. In this study, the context of a source LandXML class includes its attributes and children entities in the LandXML tree hierarchy. The context of an input concept candidate, as discussed earlier, is composed of its attributes found in CeLex. The context similarity (as shown in Equation \ref{eq:simC}) is defined as the ratio between the number of common items and the total context words of the target concept, where $Cc_A$, and $Cc_B$ respectively denotes the contexts of the input concept and a LandXML class. 
+%
+\begin{equation}
+Sc=\frac{|Cc_A\cap Cc_B|}{|Cc_A|}
+\label{eq:simC}
+\end{equation} 
+%Rodriguez, M. A., and Egenhofer, M. J. (2003). Determining semantic similarity among entity classes from different ontologies. IEEE transactions on knowledge and data engineering, 15(2), 442-456. \\
+%
+%
+\subsection{Distinguishing attribute measure}
+common attributes do not provide distinguishing difference for a concept. for example, with, length, area, type. These data attributes are common. Some distinguishing attributes of pavement inlucde distress. In order to take into account this matter. The authors proposed the below method to measure the weight for each attribute. this measure is call t-value which is based the frequency of each attribute in the lexicon.  
+%
+\begin{equation}
+t-value_k=1-\frac{|a_k|}{\max_{1 \leq j \leq n} |a_j|}
+\label{eq:t-value}
+\end{equation} 
+%
+\subsection{Composition of MVDs}
+%
+Each keywords generates a specific mdv, this sections explains method operators for merging mvds generated by multiple keywords. 
+%
+\section{Implementation and Discussion} \label{sec:val} %(800 words=60 sentences)
+
+\subsection{Experiment setup}
+to validate the system, 10 keywords representing general concepts in the civil engineering were selected randomly from subsection title in manual documents, since keyword in section title are likely to represent a certain interest context.Three Ph.D. students were invited to work as annotators who are asked to manually identify all the relevant matching entities in the which are supposed to be included in the gold standard MVD. A sub set of 100 entities in the schema were randomly selected. annotator are required to assign one of the two tags `related' and `non-related' to each pair of the input keyword and the the selected landxml schema. 
+\par
+the system was evaluated using evaluation measure adopted from the information retrieval domain. analogy, the number of entities retrieved is corresponding with the number of documents retrieved. the measure are defined using the following equations. to consider the ranking of th obtained result, reverse ranking are implemented.  
+\par
+An evaluation experiment was conducted to evaluate the context-aware searching algorithm. In this test, an asset management guidance was reviewed and eight keywords showing data requirements were extracted including roadway type, drainage, alignment, shoulder, pavement, safety, traffic lane, and climate. A graduate student was invited to manually identify branches of the LandXML schema that match to each of the tested keywords. The automatically generated MVDs were compared with the corresponding manually identified subsets to evaluate the algorithm performance. 
+\subsection{Results and discussions}
+\par
+Table \ref{table:experiment} shows the experiment results when the weights $w_n$ and $w_c$ were both set 0.5. As shown in the table, the proposed method achieves a precision of 62.5\% (ratio between correct answers and total tested input keywords). The algorithm successfully detects branches of LandXML tree even keywords are not similar to the names of the source entities. For example, `drainage system' term is not used by LandXML, however the designed system can detect that the LandXML branch going through pipeNetwork entity is regarded to drainage information. Since the algorithm performance would depend upon the size of sample keyword set and the selection of partial similarity weights, the authors intend to test the algorithm on a bigger dataset with various settings. One limitation of this research is that the algorithm generates only one relevant branch even for a broad keyword that can be associated to multiple nodes. Future research should be able to detect and aggregate multiple matched LandXML nodes for a single input.
+\begin{table} [t] 
+	\caption{Experiment results}
+	\label{table:experiment}
+	\centering
+	\small
+	\renewcommand{\arraystretch}{1.25}
+	\begin{tabular}{l l l l}
+		\hline
+		\hline
+		\textbf{Keyword}  & \textbf{Matched Landxml Branches} & \textbf{S} & \textbf{Correct?}\\
+		\hline
+		drainage & PipeNetwork-->pipeNetworkType-->storm & 0.25 & yes\\
+		vertical alignment  & Roadway-->Alignment-->Profile-->ProfAlign & 0.52 & yes\\
+		shoulder& Roadway-->Lanes&0.28&no\\
+		pavement &Zone-->pavementSurfaceType & 0.25& yes\\
+		roadway type &Roadways-->Roadway-->intersectionType & 0.54 & no\\
+		safety& Roadway-->TrafficVolume & 0.18&yes\\
+		&Roadway-->Intersection-->TrafficControl&0.18& yes\\
+		traffic lane& Roadway-->Lanes & 0.53&yes\\
+		climate& zoneMaterialType-->soil & 0.25&no\\
+		\hline
+		\hline
+	\end{tabular}
+	\normalsize
+\end{table}
+\section{Research contributions and implications}
+the system developed in this study is expected to offer an effective supporting tools for mvd developers. the automated matching and related source entities generated by the system provide developers a short list of terms rather manually scrolling and investigating the meaning of each entities in the reference conceptual documents. By provide a list of the most semantically related items, focus is paid on those items and the time and efforts can be significantly reduced. 
+\par
+moreover, the system is expected to allow reduce time in idm development, in current practices, figure show the proposed mvd development using the proposed system. as shown, using this system, this approach is flexible, since the domain knowledge terminology has been captured and stored in the databases in terms of concepts relations, attributes. less effort is needed by the idm developer team in interviewing domain experts, documentsation and translating meeting minutes into spreadsheet. As shown the information format changing from spreadsheet to mvdxml. the translation is currently done by software developers. in this idm data exchange requirement documents. structuring information 
+%
+\section{Conclusions} \label{sec:conclns} %(300 words=20 sentences)
+Model view definition has been widely recognized as a means for facilitating seamless information exchange throughout the project life-cycle. Although a large body of MVDs have been developed, they are still limited compared to the large demand in the construction industry. This is because that  the current ad-hoc practices of MVD development is time consuming. The contribution of this study is an automated method for generation of MVD using users' keywords. The designed algorithm leverages a domain data dictionary to interpret user's intentions. It also utilizes a context-aware approach to match the interpreted concepts to those entities in the LandXML data standard. The algorithm takes into account the variation in names of concepts, thus it can reduce mismatched due to the inconsistent use of terminology between users and the data standard. The proposed method was tested on a set of eight keywords extracted from an asset management manual. The result shows that the algorithm is an effective tool for extracting subsets of data schema. As using keywords is one preferable method for information search, the algorithm is expected to become a fundamental tool assisting professionals in extracting data from complex digital datasets. 
+
+\section*{Acknowledgement}
+This research was funded by the National Science Foundation (NSF) under the Award Number 1635309. The authors gratefully acknowledge NSF's support. Any opinions, findings, conclusions, and recommendations expressed in this paper are those of the authors and do not necessarily reflect the views of NSF.
+
+%bibliography
+\bibliography{mybib}
+%
+%
+\end{document}
+

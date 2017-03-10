@@ -1,0 +1,16 @@
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\textwidth]{Figure1_partial_views}
+\caption{Excerpts of Partial Views of LandXML}
+\label{fig:concept}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{Figure2_proposed_method.png}
+\caption{Keyword-driven MVD generation approach}
+\label{fig:method}
+\end{figure}
+\efloatseparator
+ 
